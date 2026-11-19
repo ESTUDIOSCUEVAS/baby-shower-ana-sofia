@@ -1,0 +1,128 @@
+:root {
+  color-scheme: light;
+  --ink: #583629;
+  --paper: #fbf1e2;
+  --rose: #e5beb8;
+  --edge: #ba8580;
+  color: var(--ink);
+  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--rose);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+body.sealed { overflow: hidden; }
+button, a { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid #733b35; outline-offset: 5px; }
+.invitation {
+  max-width: 43rem;
+  margin: 0 auto;
+  background: var(--paper);
+  text-align: center;
+  box-shadow: 0 0 3rem #61382d26;
+}
+.invitation header, .invitation section { padding: 4rem clamp(1.4rem, 7vw, 5rem); }
+.invitation header { padding-top: clamp(3.75rem, 11vh, 8rem); }
+.invitation section { border-top: 1px solid #d9b7a3; }
+.eyebrow {
+  font: 600 .78rem/1.5 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .24em;
+}
+h1, h2 { font-weight: 400; }
+h1 { font-size: clamp(3.2rem, 11vw, 6rem); font-style: italic; line-height: .98; margin: 1.25rem 0 2rem; }
+h1 span { display: block; font-size: .36em; font-style: normal; margin-top: .55em; }
+h2 { font-size: clamp(1.8rem, 6vw, 2.5rem); margin: 0 0 1.2rem; }
+p { font-size: 1.13rem; line-height: 1.6; max-width: 29rem; margin: .9rem auto; }
+.parents { margin-top: 2rem; font-size: 1.02rem; }
+.venue { font-weight: bold; }
+.action {
+  display: inline-block;
+  max-width: 100%;
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  padding: .8rem 1rem;
+  margin-top: .5rem;
+  background: #f9e5dc;
+  color: var(--ink);
+  cursor: pointer;
+  font: 600 .9rem/1.35 system-ui, sans-serif;
+  text-decoration: none;
+}
+.action:hover { background: #f1d2c8; }
+.envelope { width: min(100%, 26rem); margin: 1.6rem auto 0; }
+.envelope summary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  list-style: none;
+  border: 1px solid #c69689;
+  border-radius: 4px;
+  background: #f5dcd2;
+  padding: 4rem 1rem 1.25rem;
+  cursor: pointer;
+  box-shadow: 0 8px 18px #63382c18;
+}
+.envelope summary::-webkit-details-marker { display: none; }
+.flap {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5rem;
+  background: #e1b3a6;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform .45s ease;
+  z-index: -1;
+}
+.envelope[open] .flap { transform: scaleY(.2); }
+.envelope i { display: block; font-size: 1.45rem; }
+.open-label, .close-label { display: block; margin-top: .5rem; font: .9rem/1.4 system-ui, sans-serif; }
+.envelope:not([open]) .close-label, .envelope[open] .open-label { display: none; }
+.photos { margin-top: .9rem; }
+.envelope[open] .photos { animation: lift .45s ease both; }
+figure { margin: .8rem 0; padding: .6rem; background: #fffaf0; box-shadow: 0 4px 14px #63382c18; }
+figure img { display: block; width: 100%; height: auto; }
+figcaption { margin: .55rem 0 .2rem; font-size: .9rem; }
+.gifts { background: #f8e4db; }
+.cover {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #e5bcb7;
+}
+.cover-art {
+  position: relative;
+  width: min(100%, calc(100svh * 941 / 1672));
+  aspect-ratio: 941 / 1672;
+}
+.cover-art img { display: block; width: 100%; height: 100%; }
+.cover-open {
+  position: absolute;
+  inset: 54% 0 23%;
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+.cover-open:focus-visible { outline-offset: -5px; }
+.cover-leaf {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: url('assets/portada.webp') center / 100% 100%;
+}
+.cover.opening { background: transparent; }
+.cover.opening img { visibility: hidden; }
+.cover.opening .cover-open { display: none; }
+.cover.opening .cover-leaf { display: block; }
+.cover.opening .left { clip-path: inset(0 50% 0 0); animation: left .85s ease-in-out both; }
+.cover.opening .right { clip-path: inset(0 0 0 50%); animation: right .85s ease-in-out both; }
+@keyframes left { to { transform: translateX(-85%) rotate(-5deg); opacity: 0; } }
+@keyframes right { to { transform: translateX(85%) rotate(5deg); opacity: 0; } }
+@keyframes lift { from { transform: translateY(-.6rem); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
