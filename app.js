@@ -3,6 +3,11 @@ const opener = document.querySelector('.cover-open');
 const invitation = document.querySelector('.invitation');
 const heading = document.querySelector('h1');
 
+const coverImage = cover.querySelector('img');
+const showBackupButton = () => coverImage.parentElement.classList.add('failed');
+coverImage.addEventListener('error', showBackupButton, { once: true });
+if (coverImage.complete && !coverImage.naturalWidth) showBackupButton();
+
 cover.hidden = false;
 invitation.inert = true;
 document.body.classList.add('sealed');
@@ -15,7 +20,7 @@ opener.addEventListener('click', () => {
     heading.focus({ preventScroll: true });
   }
 
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (!coverImage.naturalWidth || matchMedia('(prefers-reduced-motion: reduce)').matches) {
     showInvitation();
     return;
   }
