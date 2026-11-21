@@ -13,13 +13,15 @@ invitation.inert = true;
 document.body.classList.add('sealed');
 
 opener.addEventListener('click', () => {
+  playMusic();
+
   function showInvitation() {
     cover.hidden = true;
     invitation.inert = false;
     document.body.classList.remove('sealed');
     invitation.classList.add('revealed');
     heading.focus({ preventScroll: true });
-    startPhotoSequence();
+    musicControl.hidden = false;
   }
 
   if (!coverImage.naturalWidth || reducedMotion.matches) {
@@ -32,42 +34,33 @@ opener.addEventListener('click', () => {
 }, { once: true });
 
 
-const frame = document.querySelector('.print');
-const photos = [...frame.querySelectorAll('img')];
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-let photoIndex = 0;
-let photoTimer;
-let frameVisible = false;
+const music = document.querySelector('#musica');
+const musicControl = document.querySelector('.music-control');
+music.volume = 0.45;
 
-function scheduleNextPhoto() {
-  clearTimeout(photoTimer);
-  if (!frameVisible || document.hidden || photos.length < 2) return;
-
-  photoTimer = setTimeout(() => {
-    photos[photoIndex].setAttribute('aria-hidden', 'true');
-    photoIndex = (photoIndex + 1) % photos.length;
-    photos[photoIndex].setAttribute('aria-hidden', 'false');
-    scheduleNextPhoto();
-  }, 5000);
+function playMusic() {
+  music.play().catch(() => {
+    musicControl.textContent = 'Reproducir música';
+  });
 }
 
-function startPhotoSequence() {
-  if (photos.length < 2) return;
-  photos[0].setAttribute('aria-hidden', 'false');
-  photos[1].setAttribute('aria-hidden', 'true');
-  photos[1].hidden = false;
-  frame.classList.add('rotating');
+music.addEventListener('play', () => {
+  musicControl.textContent = 'Pausar música';
+});
+music.addEventListener('pause', () => {
+  musicControl.textContent = 'Reproducir música';
+});
+musicControl.addEventListener('click', () => {
+  if (music.paused) playMusic();
+  else music.pause();
+});
 
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(([entry]) => {
-      frameVisible = entry.isIntersecting && entry.intersectionRatio >= 0.5;
-      scheduleNextPhoto();
-    }, { threshold: 0.5 });
-    observer.observe(frame);
-  } else {
-    frameVisible = true;
-    scheduleNextPhoto();
-  }
-
-  document.addEventListener('visibilitychange', scheduleNextPhoto);
+if ('IntersectionObserver' in window && !reducedMotion.matches) {
+  const gift = document.querySelector('.gift-tag');
+  const observer = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    gift.classList.add('gift-revealed');
+    observer.disconnect();
+  }, { threshold: 0.35 });
+  observer.observe(gift);
 }

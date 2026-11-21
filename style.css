@@ -187,14 +187,6 @@ html { scroll-behavior: smooth; }
   .letter figure { width: min(90%, 17.5rem); margin-inline: auto; }
 }
 
-/* Una sola impresión: ambas ecografías comparten el marco. */
-.print.rotating img {
-  grid-area: 1 / 1;
-  transition: opacity .8s ease-in-out;
-}
-.print.rotating img[aria-hidden="true"] {
-  opacity: 0;
-}
 .invitation.revealed .intro,
 .invitation.revealed h1,
 .invitation.revealed .letter {
@@ -207,8 +199,102 @@ html { scroll-behavior: smooth; }
   to { opacity: 1; transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .print.rotating img { transition: none; }
   .invitation.revealed .intro,
   .invitation.revealed h1,
   .invitation.revealed .letter { animation: none; }
 }
+
+.letter { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+.letter figure { width: min(100%, 34rem); margin-inline: auto; }
+.print {
+  position: relative;
+  isolation: isolate;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.35rem, 2vw, .8rem);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  transform: none;
+  box-shadow: none;
+}
+.print::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 53% -5% auto;
+  height: .65rem;
+  transform: rotate(-5deg);
+  background: linear-gradient(#cd9692, #e5b8ae, #b77876);
+}
+.print img {
+  box-sizing: border-box;
+  border: clamp(.25rem, 1vw, .55rem) solid #fff7e9;
+  box-shadow: 0 .4rem .85rem #60372b30;
+  aspect-ratio: 1.4;
+  object-fit: contain;
+}
+.letter .message { text-align: center; padding: 0; }
+.message::before { display: none; }
+.message p { margin-inline: auto; }
+.signature i { display: inline-block; margin-bottom: .35rem; }
+.invitation .gifts { background: repeating-linear-gradient(90deg, #eac6be 0 1.4rem, #e7beb7 1.4rem 2.8rem); }
+.gift-tag {
+  position: relative;
+  padding-top: 3.5rem;
+  border-radius: 1.1rem .25rem;
+  box-shadow: 0 .7rem 2rem #67403530, inset 0 0 0 .4rem #f6e3d3;
+}
+.gift-ribbon {
+  position: absolute;
+  top: .9rem;
+  left: calc(50% - 2rem);
+  width: 4rem;
+  height: 1.6rem;
+}
+.gift-ribbon::before, .gift-ribbon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 52%;
+  height: 76%;
+  background: linear-gradient(155deg, #e2aca5, #ba7a78, #d69d97);
+  border: 1px solid #a76664;
+}
+.gift-ribbon::before { left: 0; border-radius: 75% 58% 30% 60%; transform: rotate(13deg); }
+.gift-ribbon::after { right: 0; border-radius: 58% 75% 60% 30%; transform: rotate(-13deg); }
+.gift-ribbon span {
+  position: absolute;
+  z-index: 1;
+  inset: .22rem 41% auto;
+  height: .75rem;
+  background: #c78e86;
+  border-radius: 25%;
+}
+.gift-tag .action { background: #854b4d; color: #fff8ee; }
+.gift-tag .action:hover { background: #713d40; }
+.gift-revealed { animation: gift-arrival .7s ease-out both; }
+.gift-revealed .gift-ribbon { animation: ribbon-settle .9s .15s ease-out both; }
+@keyframes gift-arrival {
+  from { opacity: 0; transform: translateY(1rem) rotate(-2deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+@keyframes ribbon-settle {
+  0% { transform: scale(.75) rotate(-12deg); }
+  64% { transform: scale(1.08) rotate(5deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.music-control {
+  position: fixed;
+  z-index: 2;
+  right: .75rem;
+  bottom: .75rem;
+  min-height: 44px;
+  padding: .55rem .8rem;
+  border: 1px solid #b47f76;
+  border-radius: 999px;
+  background: #fff4e7;
+  color: #583629;
+  font: 600 .77rem system-ui, sans-serif;
+  cursor: pointer;
+}
+.invitation { padding-bottom: 3rem; }
