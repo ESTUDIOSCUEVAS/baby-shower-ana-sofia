@@ -157,3 +157,58 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   * { animation-duration: .01ms !important; }
 }
+.intro { margin: 0 0 .65rem; color: #83504e; font-size: clamp(1rem, 3vw, 1.4rem); font-style: italic; }
+.dedication h1 { margin: 0; font-size: clamp(3rem, 11.5vw, 6.75rem); font-style: italic; font-weight: 400; letter-spacing: -.072em; line-height: .94; }
+.dedication h1 span { display: block; font: 600 clamp(.68rem, 2vw, .91rem)/1.45 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .2em; margin-top: .95rem; }
+.letter { display: grid; grid-template-columns: 1fr .9fr; gap: clamp(1.6rem, 6vw, 4.7rem); align-items: center; }
+.letter figure { margin: 0; min-width: 0; text-align: center; }
+.print {
+  display: grid; place-items: center; padding: .48rem;
+  background: #fffbf2; border: 1px solid #aa7c6b62;
+  box-shadow: 0 .55rem 1.25rem #60372b25;
+  transform: rotate(-2deg);
+}
+.print img { display: block; width: 100%; height: auto; aspect-ratio: 1.45; object-fit: contain; background: #281716; }
+[hidden] { display: none !important; }
+.message { position: relative; padding-left: clamp(.85rem, 2vw, 1.6rem); }
+.message::before {
+  content: ""; position: absolute; inset: .1rem auto .15rem 0; width: .27rem;
+  background: linear-gradient(90deg, #b77d79, #dda9a2 55%, #b47b76); box-shadow: 1px 1px 2px #73423835;
+}
+.message p { margin: 0; font-size: clamp(1.05rem, 2.2vw, 1.29rem); line-height: 1.53; }
+.message .signature { margin-top: .9rem; font-size: .95rem; font-style: italic; }
+
+.invitation .dedication { background: linear-gradient(135deg, #fff7e9, #f5e6d6); }
+.dedication .intro { margin-bottom: .75rem; }
+.dedication h1 { margin-bottom: 2rem; }
+.letter .message { text-align: left; }
+@media (max-width: 42rem) {
+  .letter { grid-template-columns: 1fr; gap: 1.2rem; }
+  .letter figure { width: min(90%, 17.5rem); margin-inline: auto; }
+}
+
+/* Una sola impresión: ambas ecografías comparten el marco. */
+.print.rotating img {
+  grid-area: 1 / 1;
+  transition: opacity .8s ease-in-out;
+}
+.print.rotating img[aria-hidden="true"] {
+  opacity: 0;
+}
+.invitation.revealed .intro,
+.invitation.revealed h1,
+.invitation.revealed .letter {
+  animation: appear-on-paper .7s cubic-bezier(.2,.7,.3,1) both;
+}
+.invitation.revealed h1 { animation-delay: .1s; }
+.invitation.revealed .letter { animation-delay: .23s; }
+@keyframes appear-on-paper {
+  from { opacity: 0; transform: translateY(.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .print.rotating img { transition: none; }
+  .invitation.revealed .intro,
+  .invitation.revealed h1,
+  .invitation.revealed .letter { animation: none; }
+}

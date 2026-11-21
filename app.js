@@ -17,10 +17,12 @@ opener.addEventListener('click', () => {
     cover.hidden = true;
     invitation.inert = false;
     document.body.classList.remove('sealed');
+    invitation.classList.add('revealed');
     heading.focus({ preventScroll: true });
+    startPhotoSequence();
   }
 
-  if (!coverImage.naturalWidth || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (!coverImage.naturalWidth || reducedMotion.matches) {
     showInvitation();
     return;
   }
@@ -29,3 +31,43 @@ opener.addEventListener('click', () => {
   cover.classList.add('opening');
 }, { once: true });
 
+
+const frame = document.querySelector('.print');
+const photos = [...frame.querySelectorAll('img')];
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let photoIndex = 0;
+let photoTimer;
+let frameVisible = false;
+
+function scheduleNextPhoto() {
+  clearTimeout(photoTimer);
+  if (!frameVisible || document.hidden || photos.length < 2) return;
+
+  photoTimer = setTimeout(() => {
+    photos[photoIndex].setAttribute('aria-hidden', 'true');
+    photoIndex = (photoIndex + 1) % photos.length;
+    photos[photoIndex].setAttribute('aria-hidden', 'false');
+    scheduleNextPhoto();
+  }, 5000);
+}
+
+function startPhotoSequence() {
+  if (photos.length < 2) return;
+  photos[0].setAttribute('aria-hidden', 'false');
+  photos[1].setAttribute('aria-hidden', 'true');
+  photos[1].hidden = false;
+  frame.classList.add('rotating');
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      frameVisible = entry.isIntersecting && entry.intersectionRatio >= 0.5;
+      scheduleNextPhoto();
+    }, { threshold: 0.5 });
+    observer.observe(frame);
+  } else {
+    frameVisible = true;
+    scheduleNextPhoto();
+  }
+
+  document.addEventListener('visibilitychange', scheduleNextPhoto);
+}
