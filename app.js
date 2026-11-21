@@ -29,15 +29,3 @@ opener.addEventListener('click', () => {
   cover.classList.add('opening');
 }, { once: true });
 
-const photos = [...document.querySelectorAll('.photos figure')];
-const photoNext = document.querySelector('.photo-next');
-let currentPhoto = 0;
-photos[1].hidden = true;
-photoNext.hidden = false;
-
-photoNext.addEventListener('click', () => {
-  photos[currentPhoto].hidden = true;
-  currentPhoto = (currentPhoto + 1) % photos.length;
-  photos[currentPhoto].hidden = false;
-  photoNext.textContent = currentPhoto === 0 ? 'Ver segunda ecografía' : 'Ver primera ecografía';
-});
